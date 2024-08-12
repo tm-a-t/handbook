@@ -2,22 +2,23 @@ import {defineConfig} from 'vitepress'
 import head from './head'
 import ruConfig from './ru'
 import sidebar from './sidebar'
+import {tabsMarkdownPlugin} from 'vitepress-plugin-tabs'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-    title: 'Telegram Bot Handbook',
-    titleTemplate: 'Handbook',
+    title: 'Papercraft',
+    titleTemplate: ':title • Papercraft',
 
     appearance: 'dark',
     cleanUrls: true,
-    description: 'Explore Telegram features, bot limitations, and API tricks.',
+    description: 'Tools and resources for Telegram developers. Learn to develop user-friendly, featureful, and stable Telegram bots.',
+
     head: head,
     lastUpdated: true,
     locales: {
         root: {
             label: 'English',
             lang: 'en',
-            link: '/en/',
         },
         ru: {
             label: 'Русский',
@@ -26,17 +27,40 @@ export default defineConfig({
         },
     },
     sitemap: {
-        hostname: 'https://handbook.tmat.me',
+        hostname: 'https://papercraft.tmat.me',
     },
+    srcDir: 'pages',
     srcExclude: ['readme.md'],
     markdown: {
         config: (md) => {
             md.disable('emoji')
+            md.use(tabsMarkdownPlugin)
+        }
+    },
+    vite: {
+        ssr: {
+            noExternal: [
+                '@nolebase/vitepress-plugin-highlight-targeted-heading',
+            ],
+        },
+    },
+    async transformPageData(pageData, { siteConfig }) {
+        pageData.params ||= {}
+        pageData.params.hasRussianTranslation =
+            pageData.relativePath.startsWith('book')
+            || pageData.relativePath.startsWith('ru/book')
+
+        if (pageData.params.hasRussianTranslation) {
+            pageData.frontmatter.pageClass = 'has-russian-translation'
         }
     },
     themeConfig: {
+        footer: {
+            message: 'Papercraft by tmat.'
+        },
         editLink: {
-            pattern: 'https://github.com/tm-a-t/handbook/edit/main/:path'
+            pattern: 'https://github.com/tm-a-t/papercraft/edit/main/:path',
+            text: 'Edit this page on GitHub',
         },
         lastUpdated: {
             formatOptions: {
@@ -45,9 +69,16 @@ export default defineConfig({
                 forceLocale: true,
             },
         },
-        logo: {dark: '/logo.svg', light: '/logo-dark.svg', alt: 'Handbook'},
         nav: [
-            {text: 'Share', link: 'https://t.me/share?url=handbook.tmat.me/en/'},
+            {text: 'Papercraft is here 🎉', link: '/papercraft-opened'},
+            {text: 'Book', link: '/book/', activeMatch: '/book/'},
+            {text: 'Framework', link: '/framework/', activeMatch: '/framework/'},
+            {
+                text: 'TGPy',
+                link: '/tgpy/',
+                activeMatch: '/tgpy/',
+            },
+            // {text: 'Share', link: 'https://t.me/share?url=papercraft.tmat.me/'},
         ],
         outline: 'deep',
         search: {
@@ -60,7 +91,7 @@ export default defineConfig({
         },
         sidebar: sidebar,
         socialLinks: [
-            {icon: 'github', link: 'https://github.com/tm-a-t/handbook'},
+            {icon: 'github', link: 'https://github.com/tm-a-t/papercraft', ariaLabel: 'GitHub'},
         ],
     },
 })

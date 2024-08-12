@@ -7,14 +7,15 @@
     border-radius: 8px;
 }
 
-.logo {
-    transform: translateY(-2.5px);
+.vp-doc .code-label {
+    margin-top: -12px;
+    font-size: 14px;
+    line-height: 26px;
+    /*font-weight: 500;*/
+    color: var(--vp-c-text-2);
 }
 
-.vp-doc details tr:nth-child(2n) {
-    background: inherit;
-}
-
-.vp-doc details td {
-    border: none;
+:root:not(.dark) .VPHero .VPImage {
+    /*filter: drop-shadow(10px 6px 24px #8d8fba);*/
+    filter: drop-shadow(2px 4px 4px #4d4f8e);
 }
